@@ -65,7 +65,9 @@ test.describe('Domestic transfer', () => {
     { amount: '100333', fee: '301 HUF', total: '100,634 HUF', name: 'rounding to nearest HUF at 100,333' },
   ];
   for (const { amount, fee, total, name } of fees) {
-    test(`Fee boundary: ${name}`, async ({ page }) => {
+    test(`Fee boundary: ${name}`, async ({ page, gremlinRelease }) => {
+      // BUG: release 3 charges 3% instead of 0.3% (e.g. 100,000 HUF: 3,000 instead of 300 HUF).
+      test.fail(gremlinRelease === 3, 'Release 3 overcharges domestic transfer fees.');
       const transferPage = new TransferPage(page);
       const reviewPage = new ReviewPage(page);
       await fillTransfer(transferPage, amount);
@@ -75,7 +77,9 @@ test.describe('Domestic transfer', () => {
     });
   }
 
-  test('Fee boundary: maximum fee 6,000 for 2,000,000 from Savings Account', async ({ page }) => {
+  test('Fee boundary: maximum fee 6,000 for 2,000,000 from Savings Account', async ({ page, gremlinRelease }) => {
+    // BUG: release 3 charges 60,000 HUF instead of the expected 6,000 HUF for 2,000,000 HUF (3% instead of 0.3%).
+    test.fail(gremlinRelease === 3, 'Release 3 overcharges domestic transfer fees.');
     const transferPage = new TransferPage(page);
     const reviewPage = new ReviewPage(page);
     await fillTransfer(transferPage, '2000000', 'Savings Account');
