@@ -27,7 +27,12 @@ test.describe('Dashboard', () => {
     }
 
     // 3. Page extras
-    await expect(dashboard.newTransferLink).toHaveAttribute('href', '/transfer');
+    if (await dashboard.paymentsButton.isVisible()) {
+      await dashboard.openPayments();
+    }
+    await expect(dashboard.newTransferLink).toBeVisible();
+    await dashboard.newTransferLink.click();
+    await expect(page).toHaveURL(/\/transfer$/);
   });
 
   test('Recent transactions table', async ({ page }) => {

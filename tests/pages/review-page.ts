@@ -8,7 +8,7 @@ export class ReviewPage {
   constructor(private readonly page: Page) {
     this.heading = page.getByRole('heading', { name: 'Review transfer' });
     this.transferDetails = page.getByRole('table', { name: 'Transfer details' });
-    this.confirmButton = page.getByRole('button', { name: 'Confirm transfer' });
+    this.confirmButton = page.getByRole('button', { name: /^(Confirm transfer|Send money)$/ });
   }
 
   detailsRow(name: string | RegExp): Locator {

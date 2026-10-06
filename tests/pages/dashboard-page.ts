@@ -4,6 +4,7 @@ export class DashboardPage {
   readonly heading: Locator;
   readonly loadingMessage: Locator;
   readonly newTransferLink: Locator;
+  readonly paymentsButton: Locator;
   readonly transactionsTable: Locator;
   readonly showChartDataButton: Locator;
   readonly hideChartDataButton: Locator;
@@ -15,7 +16,10 @@ export class DashboardPage {
   constructor(private readonly page: Page) {
     this.heading = page.getByRole('heading', { level: 1, name: 'Accounts' });
     this.loadingMessage = page.getByText('Loading accounts...');
-    this.newTransferLink = page.getByRole('link', { name: 'New transfer' });
+    this.newTransferLink = page
+      .getByRole('link', { name: 'New transfer' })
+      .or(page.getByRole('menuitem', { name: 'New transfer' }));
+    this.paymentsButton = page.getByRole('button', { name: 'Payments' });
     this.transactionsTable = page.getByRole('table', { name: 'Recent transactions' });
     this.showChartDataButton = page.getByRole('button', { name: 'Show chart data' });
     this.hideChartDataButton = page.getByRole('button', { name: 'Hide chart data' });
@@ -26,7 +30,11 @@ export class DashboardPage {
   }
 
   account(name: 'Everyday Account' | 'Savings Account'): Locator {
-    return this.page.getByRole('region', { name });
+    const accountRegion = this.page.getByRole('region', { name });
+    const accountRow = this.page
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('rowheader', { name, exact: true }) });
+    return accountRegion.or(accountRow);
   }
 
   accountIban(name: 'Everyday Account' | 'Savings Account'): Locator {
@@ -51,6 +59,10 @@ export class DashboardPage {
 
   async showChartData(): Promise<void> {
     await this.showChartDataButton.click();
+  }
+
+  async openPayments(): Promise<void> {
+    await this.paymentsButton.click();
   }
 
   async hideChartData(): Promise<void> {

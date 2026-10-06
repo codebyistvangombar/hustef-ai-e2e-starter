@@ -18,14 +18,14 @@ export class TransferPage {
   constructor(private readonly page: Page) {
     this.heading = page.getByRole('heading', { level: 1, name: 'New transfer' });
     this.fromAccount = page.getByLabel('From account');
-    this.beneficiaryName = page.getByLabel('Beneficiary name');
+    this.beneficiaryName = page.getByLabel(/^(Beneficiary name|Payee name)$/);
     this.iban = page.getByLabel('IBAN');
     this.amount = page.getByLabel('Amount (HUF)');
-    this.reference = page.getByLabel('Reference (optional)');
+    this.reference = page.getByLabel(/^(Reference \(optional\)|Payment reference)$/);
     this.checkIbanButton = page.getByRole('button', { name: 'Check IBAN' });
     this.ibanVerification = page.getByText(/IBAN verified: GRM-/);
-    this.continueButton = page.getByRole('button', { name: 'Continue' });
-    this.beneficiaryNameError = page.getByText('Enter a beneficiary name.');
+    this.continueButton = page.getByRole('button', { name: /^(Continue|Review transfer)$/ });
+    this.beneficiaryNameError = page.getByText(/Enter a (beneficiary|payee) name\./);
     this.ibanError = page.getByText('Check the IBAN first.');
     this.amountError = page.getByText('Enter an amount greater than 0.');
     this.insufficientFundsError = page.getByText('Insufficient funds.');
