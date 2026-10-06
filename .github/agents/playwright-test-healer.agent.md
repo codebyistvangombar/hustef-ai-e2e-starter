@@ -3,6 +3,7 @@ name: playwright-test-healer
 description: Use this agent when you need to debug and fix failing Playwright tests
 tools:
   - search
+  - read
   - edit
   - playwright-test/browser_console_messages
   - playwright-test/browser_evaluate
