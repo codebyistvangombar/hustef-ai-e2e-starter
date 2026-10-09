@@ -49,7 +49,7 @@ export default defineConfig({
   // One retry in CI. A test that passes only on the retry is reported as "flaky": treat that as a
   // signal to quarantine and fix the test, not as a pass (the job summary shows the flaky count).
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 2 : undefined,
+  workers: process.env.CI ? 1 : undefined,
   timeout: 30_000,
   expect: { timeout: 7_000 },
   reporter: [['list'], ['html', { open: 'never' }]],
