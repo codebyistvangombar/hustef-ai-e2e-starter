@@ -19,10 +19,10 @@ on:
 permissions:
   contents: read
 
-# A manual run with another release (Lab 6: release 2 for "Gremlin tamer") does not cancel a running one.
+# Push and pull-request runs share the demo account, so serialize them by branch and release.
 concurrency:
-  group: e2e-${{ github.event_name }}-${{ github.ref }}-${{ inputs.release }}
-  cancel-in-progress: true
+  group: e2e-${{ github.head_ref || github.ref_name }}-${{ inputs.release }}
+  cancel-in-progress: false
 
 jobs:
   e2e:
